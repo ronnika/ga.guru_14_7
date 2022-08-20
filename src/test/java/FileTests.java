@@ -35,8 +35,12 @@ public class FileTests {
                 );
             }
         }
-        zis.close();
-        is.close();
+        if (is != null) {
+            is.close();
+            zis.close();
+        }
+
+
     }
 
     @Test
@@ -51,8 +55,10 @@ public class FileTests {
                  assertThat(pdf.text).contains("A Simple PDF File");
             }
         }
-        zis.close();
-        is.close();
+        if (is != null) {
+            is.close();
+            zis.close();
+        }
     }
 
     @Test
@@ -72,8 +78,10 @@ public class FileTests {
                 ).contains("Dulce");
             }
         }
-        zis.close();
-        is.close();
+        if (is != null) {
+            is.close();
+            zis.close();
+        }
     }
 
     @Test
@@ -82,6 +90,5 @@ public class FileTests {
         ObjectMapper objectMapper = new ObjectMapper();
         Cat cat = objectMapper.readValue(is, Cat.class);
         assertThat(cat.getAge()).isEqualTo(6);
-        assertThat(cat.getHobbies().toString().contains("sleep"));
     }
 }
