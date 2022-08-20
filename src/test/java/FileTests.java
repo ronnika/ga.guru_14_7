@@ -90,5 +90,6 @@ public class FileTests {
         ObjectMapper objectMapper = new ObjectMapper();
         Cat cat = objectMapper.readValue(is, Cat.class);
         assertThat(cat.getAge()).isEqualTo(6);
+
     }
 }
