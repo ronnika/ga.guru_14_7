@@ -1,7 +1,6 @@
 import com.codeborne.pdftest.PDF;
+import com.codeborne.xlstest.XLS;
 import com.opencsv.CSVReader;
-import org.checkerframework.framework.qual.DefaultQualifierForUse;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -42,7 +41,6 @@ public class FileTests {
         }
     }
 
-
     @Test
     void zipPDFReaderTest() throws Exception {
         InputStream is = cl.getResourceAsStream("samplePDF.zip");
@@ -53,6 +51,31 @@ public class FileTests {
             try (InputStream stream = zfile.getInputStream(entry)) {
                  PDF pdf = new PDF(stream);
                  assertThat(pdf.text).contains("A Simple PDF File");
+            }
+        }
+        if (zis != null) {
+            zis.close();
+        }
+        if (is != null) {
+            is.close();
+        }
+    }
+
+    @Test
+    void zipXLSXReaderTest() throws Exception {
+        InputStream is = cl.getResourceAsStream("sampleXLS.zip");
+        ZipInputStream zis = new ZipInputStream(is);
+        ZipFile zfile = new ZipFile(new File("src/test/resources/" + "sampleXLS.zip"));
+        ZipEntry entry;
+        while ((entry = zis.getNextEntry()) != null) {
+            try (InputStream stream = zfile.getInputStream(entry)) {
+                XLS xls = new XLS(stream);
+                assertThat(
+                        xls.excel.getSheetAt(0)
+                                .getRow(1)
+                                .getCell(1)
+                                .getStringCellValue()
+                ).contains("Dulce");
             }
         }
         if (zis != null) {
