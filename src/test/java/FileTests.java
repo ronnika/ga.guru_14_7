@@ -62,7 +62,7 @@ public class FileTests {
     }
 
     @Test
-    void zipXLSXReaderTest() throws Exception {
+    void zipXLSReaderTest() throws Exception {
         InputStream is = cl.getResourceAsStream("sampleXLS.zip");
         ZipInputStream zis = new ZipInputStream(is);
         ZipFile zfile = new ZipFile(new File("src/test/resources/" + "sampleXLS.zip"));
