@@ -1,0 +1,13 @@
+{
+  "name": "Fluffy",
+  "age": 6,
+  "owner": "Rick Astley",
+  "passportId": "ST002341",
+  "hobbies": [
+    "eat",
+    "sleep",
+    "bird watching",
+    "dropping stuff"
+  ]
+
+}

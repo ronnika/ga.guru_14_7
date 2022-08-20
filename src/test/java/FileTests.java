@@ -1,6 +1,8 @@
 import com.codeborne.pdftest.PDF;
 import com.codeborne.xlstest.XLS;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
+import domain.Cat;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -33,12 +35,8 @@ public class FileTests {
                 );
             }
         }
-        if (zis != null) {
-            zis.close();
-        }
-        if (is != null) {
-            is.close();
-        }
+        zis.close();
+        is.close();
     }
 
     @Test
@@ -53,12 +51,8 @@ public class FileTests {
                  assertThat(pdf.text).contains("A Simple PDF File");
             }
         }
-        if (zis != null) {
-            zis.close();
-        }
-        if (is != null) {
-            is.close();
-        }
+        zis.close();
+        is.close();
     }
 
     @Test
@@ -78,11 +72,16 @@ public class FileTests {
                 ).contains("Dulce");
             }
         }
-        if (zis != null) {
-            zis.close();
-        }
-        if (is != null) {
-            is.close();
-        }
+        zis.close();
+        is.close();
+    }
+
+    @Test
+    void jsonParser() throws Exception {
+        InputStream is = cl.getResourceAsStream("cat.json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Cat cat = objectMapper.readValue(is, Cat.class);
+        assertThat(cat.getAge()).isEqualTo(6);
+        assertThat(cat.getHobbies().toString().contains("sleep"));
     }
 }
