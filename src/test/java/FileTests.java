@@ -1,4 +1,7 @@
+import com.codeborne.pdftest.PDF;
 import com.opencsv.CSVReader;
+import org.checkerframework.framework.qual.DefaultQualifierForUse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -22,21 +25,41 @@ public class FileTests {
         ZipFile zfile = new ZipFile(new File("src/test/resources/" + "sampleCSV.zip"));
         ZipEntry entry;
         while ((entry = zis.getNextEntry()) != null) {
-            InputStream istr = zfile.getInputStream(entry);
-            try (InputStream stream = getClass().getClassLoader().getResourceAsStream("csv/teachers.csv");
-                 CSVReader reader = new CSVReader(new InputStreamReader(istr, StandardCharsets.UTF_8))) {
+            try (InputStream stream = zfile.getInputStream(entry);
+                 CSVReader reader = new CSVReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
                 List<String[]> csv = reader.readAll();
                 assertThat(csv).contains(
-                        new String[] {"John","Doe","120 jefferson st.", "Riverside", " NJ", " 08075"},
-                        new String[] {"Jack", "McGinnis", "220 hobo Av.", "Phila", " PA", "09119"}
+                        new String[]{"John", "Doe", "120 jefferson st.", "Riverside", " NJ", " 08075"},
+                        new String[]{"Jack", "McGinnis", "220 hobo Av.", "Phila", " PA", "09119"}
                 );
             }
         }
-
+        if (zis != null) {
+            zis.close();
+        }
+        if (is != null) {
+            is.close();
+        }
     }
 
-    @Test
-    void zipPDFReaderTest() {
 
+    @Test
+    void zipPDFReaderTest() throws Exception {
+        InputStream is = cl.getResourceAsStream("samplePDF.zip");
+        ZipInputStream zis = new ZipInputStream(is);
+        ZipFile zfile = new ZipFile(new File("src/test/resources/" + "samplePDF.zip"));
+        ZipEntry entry;
+        while ((entry = zis.getNextEntry()) != null) {
+            try (InputStream stream = zfile.getInputStream(entry)) {
+                 PDF pdf = new PDF(stream);
+                 assertThat(pdf.text).contains("A Simple PDF File");
+            }
+        }
+        if (zis != null) {
+            zis.close();
+        }
+        if (is != null) {
+            is.close();
+        }
     }
 }
